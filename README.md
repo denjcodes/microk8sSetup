@@ -1,2 +1,2 @@
 # microk8sSetup
-git clone ttps://github.com/denjcodes/microk8sSetup.git
+git clone https://github.com/denjcodes/microk8sSetup.git && cd microk8sSetup && chmod +x setup*.sh
