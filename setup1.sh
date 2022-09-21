@@ -9,9 +9,9 @@ systemctl enable --now snapd.socket
 ln -s /var/lib/snapd/snap /snap
 snap wait system seed.loaded
 systemctl restart snapd.seeded.service
-
 snap install microk8s --classic
-alias microkube=microk8s.kubectl >> ~/.bash_profile # add autocomplete
-source <(microkube completion bash | sed "s/kubectl/microkube/g") >> ~/.bashrc # add autocomplete permanently to your bash shell.
-complete -o default -F __start_kubectl microk
+#alias microkube=microk8s.kubectl >> ~/.bash_profile # add autocomplete
+snap alias microk8s.kubectl mk
+source <(mk completion bash | sed "s/kubectl/mk/g") >> ~/.bashrc # add autocomplete permanently to your bash shell.
+complete -o default -F __start_kubectl microkube
 reboot
