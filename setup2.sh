@@ -2,10 +2,10 @@
 # set -x
 microk8s enable dns dashboard storage rbac
 mk get deployment --namespace=kube-system
-while [[ $(mk -n kube-system get pods kubernetes-dashboard -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(mk -n kube-system get pods dashboard-metrics -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(mk -n kube-system get pods hostpath-provisioner  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(mk -n kube-system get pods dashboard-metrics-scraper  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+#while [[ $(mk -n kube-system get pods kubernetes-dashboard -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+#while [[ $(mk -n kube-system get pods dashboard-metrics -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+#while [[ $(mk -n kube-system get pods hostpath-provisioner  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+#while [[ $(mk -n kube-system get pods dashboard-metrics-scraper  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
 cat > dashboard-adminuser.yml << EOF
 apiVersion: v1
 kind: ServiceAccount
@@ -35,10 +35,8 @@ mk apply -f admin-role-binding.yml
 mk config > ~/.kube/config
 cat ~/.kube/config
 mkdir helm && cd $_
-wget https://get.helm.sh/helm-v3.9.3-linux-amd64.tar.gz
-tar xvf helm-v3.9.3-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin
-rm helm-v3.9.3-linux-amd64.tar.gz
-rm -rf linux-amd64
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
 helm repo update && helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install my-release bitnami/wordpress
