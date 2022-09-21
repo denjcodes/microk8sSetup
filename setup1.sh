@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 yum update -y && yum upgrade -y
 yum install -y bash-completion
 rpm --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm

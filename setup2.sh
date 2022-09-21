@@ -1,12 +1,12 @@
 #!/bin/bash
-set -x
-microk8s enable dns dashboard storage rbac
-microk8s kubectl get deployment --namespace=kube-system
-while [[ $(microkube -n kube-system get pods kubernetes-dashboard-8c67656cd-x6vbn -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(microkube -n kube-system get pods dashboard-metrics-scraper-64bcc67c9c-ll6gm -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(microkube -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(microkube -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(microkube -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+# set -x
+mk enable dns dashboard storage rbac
+mk kubectl get deployment --namespace=kube-system
+while [[ $(mk -n kube-system get pods kubernetes-dashboard-8c67656cd-x6vbn -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods dashboard-metrics-scraper-64bcc67c9c-ll6gm -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
 cat > dashboard-adminuser.yml << EOF
 apiVersion: v1
 kind: ServiceAccount
@@ -15,7 +15,7 @@ metadata:
   namespace: kube-system
 EOF
 
-microkube apply -f dashboard-adminuser.yml
+mk apply -f dashboard-adminuser.yml
 
 cat > admin-role-binding.yml << EOF
 apiVersion: rbac.authorization.k8s.io/v1
@@ -32,8 +32,8 @@ subjects:
   namespace: kube-system
 EOF
 
-microkube apply -f admin-role-binding.yml
-microk8s config > ~/.kube/config
+mk apply -f admin-role-binding.yml
+mk config > ~/.kube/config
 cat ~/.kube/config
 mkdir helm && cd $_
 wget https://get.helm.sh/helm-v3.9.3-linux-amd64.tar.gz
