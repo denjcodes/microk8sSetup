@@ -5,7 +5,7 @@ microk8s enable dns dashboard storage rbac helm3
 # update cert store with existing cert?
 # enable storage?
 mk get deployment --namespace=kube-system
-sleep 60
+# sleep 60
 mk apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
 mk config view > ~/.kube/config
@@ -44,4 +44,5 @@ mk config view > ~/.kube/config
 cat ~/.kube/config
 microk8s helm repo add bitnami https://charts.bitnami.com/bitnami && microk8s helm repo update
 microk8s helm install my-release bitnami/wordpress
+mk get svc --namespace default -w my-release-wordpress
 
