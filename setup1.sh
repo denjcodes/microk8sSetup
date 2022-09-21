@@ -2,6 +2,10 @@
 # set -x
 yum update -y && yum upgrade -y
 yum install -y bash-completion
+sudo usermod -a -G microk8s dj
+sudo chown -f -R dj ~/.kube
+newgrp microk8s
+su - dj
 rpm --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 dnf upgrade -y
 yum install -y snapd
