@@ -2,11 +2,10 @@
 # set -x
 microk8s enable dns dashboard storage rbac
 mk get deployment --namespace=kube-system
-while [[ $(mk -n kube-system get pods kubernetes-dashboard-8c67656cd-x6vbn -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(mk -n kube-system get pods dashboard-metrics-scraper-64bcc67c9c-ll6gm -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(mk -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(mk -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-while [[ $(mk -n kube-system get pods hostpath-provisioner-85ccc46f96-fxtkt  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods kubernetes-dashboard -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods dashboard-metrics -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods hostpath-provisioner  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+while [[ $(mk -n kube-system get pods dashboard-metrics-scraper  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
 cat > dashboard-adminuser.yml << EOF
 apiVersion: v1
 kind: ServiceAccount
