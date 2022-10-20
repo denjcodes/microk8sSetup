@@ -1,19 +1,7 @@
 #!/bin/bash
 # set -x
-microk8s enable dns dashboard storage rbac helm3
-# enable certificate signing
-# update cert store with existing cert?
-# enable storage?
-mk get deployment --namespace=kube-system
-# sleep 60
-mk apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+microk8s enable dns dashboard storage rbac helm3 cert-manager
 
-mk config view > ~/.kube/config
-cat ~/.kube/config
-#while [[ $(mk -n kube-system get pods kubernetes-dashboard -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-#while [[ $(mk -n kube-system get pods dashboard-metrics -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-#while [[ $(mk -n kube-system get pods hostpath-provisioner  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
-#while [[ $(mk -n kube-system get pods dashboard-metrics-scraper  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
 cat > dashboard-adminuser.yml << EOF
 apiVersion: v1
 kind: ServiceAccount
@@ -40,6 +28,21 @@ subjects:
 EOF
 
 mk apply -f admin-role-binding.yml
+
+# enable certificate signing
+# update cert store with existing cert?
+# enable storage?
+mk get deployment --namespace=kube-system
+# sleep 60
+# mk apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+mk config view > ~/.kube/config
+cat ~/.kube/config
+#while [[ $(mk -n kube-system get pods kubernetes-dashboard -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+#while [[ $(mk -n kube-system get pods dashboard-metrics -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+#while [[ $(mk -n kube-system get pods hostpath-provisioner  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+#while [[ $(mk -n kube-system get pods dashboard-metrics-scraper  -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
+
 mk config view > ~/.kube/config
 cat ~/.kube/config
 microk8s helm repo add bitnami https://charts.bitnami.com/bitnami && microk8s helm repo update
